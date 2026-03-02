@@ -29,7 +29,8 @@ You should have received a copy of the license along with Natro Macro. If not, p
 #Include "Roblox.ahk"
 #Include "DurationFromSeconds.ahk"
 #Include "nowUnix.ahk"
-#include "ErrorHandling.ahk"
+#Include "ErrorHandling.ahk"
+#Include "HashFile.ahk"
 
 #Warn VarUnset, Off
 
@@ -167,15 +168,13 @@ SC_Space:="sc039" ; Space
 SC_1:="sc002" ; 1
 SC_Slash  := "sc035" ; /
 
+#include "../lib/data/patternHashes.ahk" 
 ; import patterns and syntax check
 nm_importPatterns()
 {
 	global patterns := Map()
 	patterns.CaseSense := 0
 	global patternlist := []
-	defaultpatterns := [
-		"Auryn", "CornerXSnake", "Diamonds", "e_lol", "Fork", "Lines", "Slimline", "Snake", "Squares", "Stationary", "SuperCat", "XSnake"
-	]
 
 	if FileExist("settings\imported\patterns.ahk")
 		file := FileOpen("settings\imported\patterns.ahk", "r"), imported := file.Read(), file.Close()
@@ -197,8 +196,9 @@ nm_importPatterns()
 			), "Error", 0x40010 " T60"
 		if !InStr(imported, imported_pattern := '("' (pattern_name := StrReplace(A_LoopFileName, "." A_LoopFileExt)) '")`r`n' pattern '`r`n`r`n') 
 		{
-			for name in defaultpatterns {
-				if pattern_name = name {
+			patternhash := HashFile(A_LoopFilePath, 6)
+			for hash in defaultPatternHashes {
+				if patternhash = hash {
 					bypassWarning := 1
 				}
 			}

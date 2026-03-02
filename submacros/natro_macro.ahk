@@ -112,7 +112,7 @@ OnMessage(0x5560, nm_copyDebugLog)
 OnMessage(0x0020, nm_WM_SETCURSOR)
 
 ; set version identifier
-VersionID := "1.1.0-B3"
+VersionID := "1.1.0"
 
 ;initial load warnings
 if (A_ScreenDPI != 96)

@@ -56,7 +56,7 @@ An open-source Bee Swarm Simulator macro written in AutoHotkey!<br>
 
 This is where you can connect with the community, access guides and help channels, and download custom patterns, paths, and themes!
 
-Discord is our main platform for troubleshooting and update news!
+Discord is our main platform for troubleshooting and sharing news updates!
 
 <a href="https://discord.gg/natromacro">
   <picture>

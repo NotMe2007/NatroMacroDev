@@ -7,6 +7,7 @@ cd %~dp0
 :: IF script and executable exist, run the macro
 if exist "submacros\natro_macro.ahk" (
 	if exist "submacros\AutoHotkey32.exe" (
+		:: Optional: pass a number as the 3rd argument to delay startup (e.g. START.bat _ _ 5 for a 5-second delay)
 		if not [%~3]==[] (
 			set /a "delay=%~3" 2>nul
 			echo Starting Natro Macro in !delay! seconds.
@@ -57,7 +58,29 @@ if not [!grandparent!] == [] (
 					echo:
 					
 					echo %purple%Extracting %USERPROFILE%\%%~a\!zip!...%reset%
-					for /f delims^=^ EOL^= %%g in ('cscript //nologo "%~f0?.wsf" "%USERPROFILE%\%%~a" "%USERPROFILE%\%%~a\!zip!"') do set "folder=%%g"
+					set "folder="
+					for /f delims^=^ EOL^= %%g in ('cscript //nologo "%~f0?.wsf" "%USERPROFILE%\%%~a" "%USERPROFILE%\%%~a\!zip!" 2^>^&1') do set "folder=%%g"
+					
+					if not defined folder (
+						echo %red%Extraction failed^^! This may be a permissions issue or the zip is corrupted.%reset%
+						echo %red%Try running START.bat as Administrator, or extract manually.%reset%
+						echo %red%Join our Discord server for support: discord.gg/natromacro%reset%
+						echo:
+						<nul set /p "=%red%Press any key to exit . . . %reset%"
+						pause >nul
+						exit
+					)
+					
+					if not exist "%USERPROFILE%\%%~a\!folder!\submacros\AutoHotkey32.exe" (
+						echo %red%Extraction succeeded but AutoHotkey32.exe is missing from the extracted folder^^!%reset%
+						echo %red%The zip may be incomplete or an antivirus removed the file.%reset%
+						echo %red%Join our Discord server for support: discord.gg/natromacro%reset%
+						echo:
+						<nul set /p "=%red%Press any key to exit . . . %reset%"
+						pause >nul
+						exit
+					)
+					
 					echo %purple%Extract complete^^!%reset%
 					echo:
 					
